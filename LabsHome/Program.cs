@@ -6,7 +6,20 @@ namespace LabsHome
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            int i = 0;
+            try
+            {
+                i /= 0;
+
+                if (i <= 0)
+                {
+                    Console.WriteLine("This happened");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error");
+            }
         }
     }
 }

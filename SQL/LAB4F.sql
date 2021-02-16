@@ -13,7 +13,7 @@ USE Northwind;
 -- 2. List the product name and the number of each product from a German supplier sold to a customer in Germany using a CTE. Sort from highest to lowest.
 	WITH ProductsFromGermany AS
 	(
-		SELECT ProductsFromGermany.ProductName, SUM(OD.Quantity) AS TotalSold FROM [Order Details] AS OD
+		SELECT GermanProducts.ProductName, SUM(OD.Quantity) AS TotalSold FROM [Order Details] AS OD
 		JOIN Orders AS O
 		ON OD.OrderID = O.OrderID
 		JOIN (
@@ -21,9 +21,25 @@ USE Northwind;
 			JOIN Suppliers AS S
 			ON P.SupplierID = S.SupplierID
 			WHERE S.Country LIKE 'Germany'
-		) AS ProductsFromGermany
-		ON OD.ProductID = ProductsFromGermany.ProductID
-		GROUP BY ProductsFromGermany.ProductName
+		) AS GermanProducts
+		ON OD.ProductID = GermanProducts.ProductID
+		GROUP BY GermanProducts.ProductName
+	)
+	SELECT * FROM ProductsFromGermany ORDER BY TotalSold DESC;
+
+		WITH ProductsFromGermany AS
+	(
+		SELECT * FROM [Order Details] AS OD
+		JOIN Orders AS O
+		ON OD.OrderID = O.OrderID
+		JOIN (
+			SELECT P.ProductID, P.ProductName FROM Products AS P
+			JOIN Suppliers AS S
+			ON P.SupplierID = S.SupplierID
+			WHERE S.Country LIKE 'Germany'
+		) AS GermanProducts
+		ON OD.ProductID = GermanProducts.ProductID
+		GROUP BY GermanProducts.ProductName
 	)
 	SELECT * FROM ProductsFromGermany ORDER BY TotalSold DESC;
 
